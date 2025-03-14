@@ -1,0 +1,89 @@
+<!-- Made by ChatGPT, Engineered by Thomas Gale -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clock Emoji Cycle</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #clock {
+            font-size: 2em;
+            cursor: pointer;
+            background: #333;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        #emoji-container {
+            font-size: 5em;
+            height: 1.2em;
+        }
+        #subtitle {
+            font-size: 1.5em;
+            margin-top: 10px;
+            height: 1.5em;
+        }
+    </style>
+</head>
+<body>
+    <div id="clock">3s</div>
+    <div id="emoji-container"></div>
+    <div id="subtitle"></div>
+
+    <script>
+        const emojis = [
+            { emoji: "🫱", text: "Turn right" },
+            { emoji: "🫲", text: "Turn left" },
+            { emoji: "👉", text: "Slide right" },
+            { emoji: "👈", text: "Slide left" }
+        ];
+        let intervalTime = 3000;
+        let interval;
+        let lastIndex = -1;
+
+        function updateEmoji() {
+            document.getElementById("emoji-container").textContent = "";
+            document.getElementById("subtitle").textContent = "";
+            
+            setTimeout(() => {
+                let randomIndex;
+                do {
+                    randomIndex = Math.floor(Math.random() * emojis.length);
+                } while (randomIndex === lastIndex);
+                
+                lastIndex = randomIndex;
+                document.getElementById("emoji-container").textContent = emojis[randomIndex].emoji;
+                document.getElementById("subtitle").textContent = emojis[randomIndex].text;
+            }, 1000);
+        }
+
+        function startCycle() {
+            clearInterval(interval);
+            updateEmoji();
+            interval = setInterval(updateEmoji, intervalTime);
+        }
+
+        document.getElementById("clock").addEventListener("click", function() {
+            let newTime = prompt("Enter cycle time in seconds:", intervalTime / 1000);
+            if (newTime && !isNaN(newTime) && newTime > 0) {
+                intervalTime = newTime * 1000;
+                this.textContent = newTime + "s";
+                startCycle();
+            }
+        });
+
+        startCycle();
+    </script>
+</body>
+</html>
